@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Main {
     // Входные данные
     public static String[] x = {"Нажатие кнопки ВКЛ/ВЫКЛ",
@@ -14,8 +16,8 @@ public class Main {
 
     // Состояния
     public static String[] z = {"Машинка выключена",
-            "Машинка включена - режим ожидания",
-            "Машина наливает жидкость"};
+            "Машинка в режиме ожидания",
+            "Машинка наливает жидкость"};
 
     // Таблица состояний
     public static String[][] Conditions = {
@@ -24,12 +26,6 @@ public class Main {
             {z[0], z[2], z[1]},
             {z[0], z[1], z[1]}
     };
-    //z2	z1	z3     - по старому
-    //z1	z3	z2
-    //z1	z3	z2
-    //z1	z2	z2
-
-    // Таблица выходных сигналов
 
     public static String[][] Output = {
             {y[1], y[0], y[1]},
@@ -37,12 +33,29 @@ public class Main {
             {y[0], y[4], y[1]},
             {y[0], y[1], y[2]}
     };
-    //y2	y1	y2     - по старому
-    //y1	y4	y2
-    //y1	y5	y2
-    //y1	y2	y3
+
 
     public static void main(String[] args) {
-        System.out.println(Output[2][2]);
+        int condid = 0;
+        Scanner in = new Scanner(System.in);
+
+        for (int i=0;i<x.length;i++){
+            System.out.println((i+1) + ": " + x[i]);
+        }
+
+        while (1==1) {
+            int input = in.nextInt();
+            String condition = Conditions[input-1][condid];
+            String output = Output[input-1][condid];
+            System.out.println("Output: " + output);
+            System.out.println("Condition: " + condition); // Надо добавить таймер для контроля налитой жидкости
+
+            for (int i = 0; i<z.length; i++){ // тут меняем id у состояния
+                if (z[i] == condition){
+                    condid = i;
+                    break;
+                }
+            }
+        }
     }
 }
