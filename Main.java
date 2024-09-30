@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main {
     // Входные данные
@@ -34,27 +36,51 @@ public class Main {
             {y[0], y[1], y[2]}
     };
 
+    public static String condition, output;
+    public static int input = 99;
+    public static TimerTask STOP_signal = new TimerTask() {
+        @Override
+        public void run() {
+            input=4;
+            System.out.println("STOP signal");
+            machine(input);
+        }
+    };
+
 
     public static void main(String[] args) {
-        int condid = 0;
         Scanner in = new Scanner(System.in);
 
-        for (int i=0;i<x.length;i++){
+        for (int i=0;i<x.length-1;i++){
             System.out.println((i+1) + ": " + x[i]);
         }
 
         while (1==1) {
-            int input = in.nextInt();
-            String condition = Conditions[input-1][condid];
-            String output = Output[input-1][condid];
-            System.out.println("Output: " + output);
-            System.out.println("Condition: " + condition); // Надо добавить таймер для контроля налитой жидкости
+            input = in.nextInt();
+            while (input<0 || input>3){
+                System.out.println("Не верный ввод");
+                input = in.nextInt();
+            }
+            machine(input);
+        }
+    }
 
-            for (int i = 0; i<z.length; i++){ // тут меняем id у состояния
-                if (z[i] == condition){
-                    condid = i;
-                    break;
-                }
+    public static void machine(int input){
+        Timer timer = new Timer();
+        int condid = 0;
+        condition = Conditions[input-1][condid];
+        output = Output[input-1][condid];
+        System.out.println("Output: " + output);
+        System.out.println("Condition: " + condition);
+
+        if (condition == z[2]){
+            timer.schedule(STOP_signal, 2000);
+        }
+
+        for (int i = 0; i<z.length; i++){ // тут меняем id у состояния
+            if (z[i] == condition){
+                condid = i;
+                break;
             }
         }
     }
