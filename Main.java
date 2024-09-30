@@ -37,13 +37,13 @@ public class Main {
     };
 
     public static String condition, output;
+    public static int condid = 0;
     public static int input = 99;
     public static TimerTask STOP_signal = new TimerTask() {
         @Override
         public void run() {
-            input=4;
             System.out.println("STOP signal");
-            machine(input);
+            machine(4);
         }
     };
 
@@ -67,7 +67,6 @@ public class Main {
 
     public static void machine(int input){
         Timer timer = new Timer();
-        int condid = 0;
         condition = Conditions[input-1][condid];
         output = Output[input-1][condid];
         System.out.println("Output: " + output);
