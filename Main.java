@@ -1,6 +1,4 @@
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
     // Входные данные
@@ -10,7 +8,7 @@ public class Main {
             "Контроль объёма жидкости (250 мл)"};
 
     // Выходные данные
-    public static String[] y = { "Машинка выключается",
+    public static String[] y = {"Машинка выключается",
             "Машинка включается - режим ожидания",
             "Наливание определённого объёма жидкости (Сигнал СТОП)",
             "Машинка льет кофе",
@@ -39,25 +37,18 @@ public class Main {
     public static String condition, output;
     public static int condid = 0;
     public static int input = 99;
-    public static TimerTask STOP_signal = new TimerTask() {
-        @Override
-        public void run() {
-            System.out.println("STOP signal");
-            machine(4);
-        }
-    };
-
+    public static boolean pouring = false; // Флаг, чтобы следить за состоянием льющейся жидкости
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
 
-        for (int i=0;i<x.length-1;i++){
-            System.out.println((i+1) + ": " + x[i]);
+        for (int i = 0; i < x.length - 1; i++) {
+            System.out.println((i + 1) + ": " + x[i]);
         }
 
-        while (1==1) {
+        while (true) {
             input = in.nextInt();
-            while (input<0 || input>3){
+            while (input < 0 || input > 3) {
                 System.out.println("Не верный ввод");
                 input = in.nextInt();
             }
@@ -65,19 +56,32 @@ public class Main {
         }
     }
 
-    public static void machine(int input){
-        Timer timer = new Timer();
-        condition = Conditions[input-1][condid];
-        output = Output[input-1][condid];
+    public static void machine(int input) {
+        condition = Conditions[input - 1][condid];
+        output = Output[input - 1][condid];
         System.out.println("Output: " + output);
         System.out.println("Condition: " + condition);
 
-        if (condition == z[2]){
-            timer.schedule(STOP_signal, 2000);
+        if (condition.equals(z[2])) {
+            pouring = true;
+            Thread pouringThread = new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                    if (pouring) {
+                        System.out.println("STOP signal");
+                        machine(4);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            pouringThread.start();
+        } else {
+            pouring = false;
         }
 
-        for (int i = 0; i<z.length; i++){ // тут меняем id у состояния
-            if (z[i] == condition){
+        for (int i = 0; i < z.length; i++) { // тут меняем id у состояния
+            if (z[i].equals(condition)) {
                 condid = i;
                 break;
             }
