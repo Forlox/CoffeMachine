@@ -8,8 +8,8 @@ public class Main {
             "Контроль объёма жидкости (250 мл)"};
 
     // Выходные данные
-    public static String[] y = {"Машинка выключается",
-            "Машинка включается - режим ожидания",
+    public static String[] y = {"Индикатор горит красным",
+            "Индикатор горит зелёным",
             "Наливание определённого объёма жидкости (Сигнал СТОП)",
             "Машинка льет кофе",
             "Машина льет молоко"};
@@ -66,7 +66,7 @@ public class Main {
             pouring = true;
             Thread pouringThread = new Thread(() -> {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(4000);
                     if (pouring) {
                         System.out.println("STOP signal");
                         machine(4);
